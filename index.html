@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahara Flash Score</title>
+
+<style>
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0b1220;
+  color:white;
+}
+
+/* APP */
+.app{
+  display:flex;
+  height:100vh;
+  overflow:hidden;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:220px;
+  min-width:220px;
+  background:#0f172a;
+  padding:10px;
+  overflow-y:auto;
+  position:relative;
+  z-index:10;
+}
+
+.sidebar h2{
+  text-align:center;
+}
+
+/* MAIN */
+.main{
+  flex:1;
+  padding:10px;
+  overflow-y:auto;
+  position:relative;
+  z-index:1;
+}
+
+/* RIGHT */
+.right{
+  width:280px;
+  min-width:280px;
+  background:#0f172a;
+  padding:10px;
+  overflow-y:auto;
+  position:relative;
+  z-index:10;
+}
+
+/* BUTTONS */
+button,
+.sidebar button{
+
+  width:100%;
+  margin-bottom:8px;
+  padding:12px;
+
+  background:#1e293b;
+  border:none;
+
+  color:white;
+
+  border-radius:8px;
+
+  cursor:pointer;
+
+  position:relative;
+  z-index:1000;
+
+  pointer-events:auto;
+
+}
+
+button:hover{
+  background:#2563eb;
+}
+
+/* CARD */
+.card{
+  background:#111827;
+  border:1px solid #1f2937;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:10px;
+
+  position:relative;
+  z-index:1;
+}
+
+.card:hover{
+  border-color:#2563eb;
+}
+
+h1,h2,h3,p{
+  margin-top:0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <h2>⚽ Sahara</h2>
+
+    <button onclick="openLeague('ALL')">🌍 All Matches</button>
+
+    <button onclick="openLeague('Premier League')">
+      🏴 Premier League
+    </button>
+
+    <button onclick="openLeague('La Liga')">
+      🇪🇸 La Liga
+    </button>
+
+    <button onclick="openLeague('Serie A')">
+      🇮🇹 Serie A
+    </button>
+
+    <button onclick="openLeague('Bundesliga')">
+      🇩🇪 Bundesliga
+    </button>
+
+    <button onclick="openLeague('Ligue 1')">
+      🇫🇷 Ligue 1
+    </button>
+
+    <button onclick="openLeague('Africa')">
+      🌍 Africa
+    </button>
+
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <div id="content"></div>
+
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+
+    <div id="rightPanel"></div>
+
+  </div>
+
+</div>
+
+<script>
+
+let STATE = { matches: [] };
+
+/* GENERATE LEAGUE */
+function generateLeague(name){
+
+  const teams = [
+    "Arsenal",
+    "Chelsea",
+    "Liverpool",
+    "Barcelona",
+    "Real Madrid",
+    "Milan",
+    "Inter",
+    "Bayern",
+    "PSG",
+    "Napoli"
+  ];
+
+  let matches = [];
+
+  for(let i=0;i<35;i++){
+
+    matches.push({
+
+      id:name + "_" + i,
+
+      competition:name,
+
+      minute:Math.floor(Math.random()*90),
+
+      status:"LIVE",
+
+      homeTeam:{
+        id:i,
+        name:teams[Math.floor(Math.random()*teams.length)]
+      },
+
+      awayTeam:{
+        id:i+100,
+        name:teams[Math.floor(Math.random()*teams.length)]
+      },
+
+      score:{
+        home:Math.floor(Math.random()*5),
+        away:Math.floor(Math.random()*5)
+      }
+
+    });
+
+  }
+
+  return matches;
+}
+
+/* BUILD ALL */
+function buildMatches(){
+
+  STATE.matches = [
+
+    ...generateLeague("Premier League"),
+    ...generateLeague("La Liga"),
+    ...generateLeague("Serie A"),
+    ...generateLeague("Bundesliga"),
+    ...generateLeague("Ligue 1"),
+    ...generateLeague("Africa")
+
+  ];
+
+}
+
+/* OPEN LEAGUE */
+function openLeague(name){
+
+  if(name === "ALL"){
+
+    render(STATE.matches);
+    return;
+
+  }
+
+  const filtered = STATE.matches.filter(m =>
+    m.competition === name
+  );
+
+  render(filtered);
+}
+
+/* RENDER */
+function render(matches){
+
+  let title = matches[0]?.competition || "All Matches";
+
+  let html = `<h2>⚽ ${title}</h2>`;
+
+  matches.forEach(m=>{
+
+    html += `
+
+      <div class="card" onclick="openMatch('${m.id}')">
+
+        <div style="display:flex;justify-content:space-between">
+
+          <div>${m.homeTeam.name}</div>
+
+          <div>
+            <b>${m.score.home} - ${m.score.away}</b>
+          </div>
+
+          <div>${m.awayTeam.name}</div>
+
+        </div>
+
+        <small>${m.minute}' LIVE</small>
+
+      </div>
+
+    `;
+  });
+
+  document.getElementById("content").innerHTML = html;
+}
+
+/* OPEN MATCH */
+function openMatch(id){
+
+  const m = STATE.matches.find(x => x.id === id);
+
+  if(!m) return;
+
+  let html = `
+
+    <div class="card">
+
+      <h2>${m.homeTeam.name} vs ${m.awayTeam.name}</h2>
+
+      <h1 style="text-align:center">
+        ${m.score.home} - ${m.score.away}
+      </h1>
+
+      <p>${m.competition}</p>
+
+      <p>${m.minute}' LIVE</p>
+
+    </div>
+
+    <div class="card">
+
+      <button onclick="showStats()">📊 Stats</button>
+
+      <button onclick="showFormation('${m.homeTeam.name}')">
+        🏠 Home Formation
+      </button>
+
+      <button onclick="showFormation('${m.awayTeam.name}')">
+        ✈ Away Formation
+      </button>
+
+      <button onclick="openLeague('${m.competition}')">
+        ⬅ Back
+      </button>
+
+    </div>
+
+    <div class="card">
+
+      <h3>📡 Commentary</h3>
+
+      <p>⚽ Goal chance</p>
+      <p>🎯 Shot on target</p>
+      <p>🟨 Yellow card</p>
+      <p>🔄 Substitution</p>
+
+    </div>
+
+  `;
+
+  document.getElementById("content").innerHTML = html;
+}
+
+/* STATS */
+function showStats(){
+
+  let html = `
+
+    <div class="card">
+
+      <h3>📊 Match Stats</h3>
+
+      <p>Shots: ${rand(20)} - ${rand(20)}</p>
+
+      <p>Possession:
+      ${rand(60)}% - ${100-rand(60)}%</p>
+
+      <p>Passes:
+      ${rand(500)} - ${rand(500)}</p>
+
+      <p>Corners:
+      ${rand(10)} - ${rand(10)}</p>
+
+      <p>Fouls:
+      ${rand(15)} - ${rand(15)}</p>
+
+    </div>
+
+  `;
+
+  document.getElementById("rightPanel").innerHTML = html;
+}
+
+/* FORMATION */
+function showFormation(team){
+
+  let html = `<h3>${team} Formation</h3>`;
+
+  for(let i=1;i<=11;i++){
+
+    html += `
+      <div class="card">
+        ⚽ Player ${i}
+      </div>
+    `;
+  }
+
+  document.getElementById("rightPanel").innerHTML = html;
+}
+
+/* RIGHT PANEL */
+function updateRightPanel(){
+
+  document.getElementById("rightPanel").innerHTML = `
+
+    <div class="card">
+
+      <h3>⚽ Sahara Flash Score</h3>
+
+      <p>Welcome to Sahara Flash Score.</p>
+
+    </div>
+
+  `;
+}
+
+/* RANDOM */
+function rand(max){
+  return Math.floor(Math.random()*max);
+}
+
+/* START */
+buildMatches();
+render(STATE.matches);
+updateRightPanel();
+
+</script>
+
+</body>
+</html>
