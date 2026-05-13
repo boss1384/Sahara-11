@@ -1,0 +1,165 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
+}
+
+body{
+  background:#0b1220;
+  color:#ffffff;
+}
+
+/* =========================
+   HEADER
+========================= */
+h1{
+  font-size:22px;
+  font-weight:bold;
+  letter-spacing:1px;
+}
+
+.text-green-400{
+  color:#22c55e;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+#content{
+  padding:12px;
+}
+
+/* =========================
+   MATCH CARD
+========================= */
+.card{
+  background:linear-gradient(145deg,#111827,#0f172a);
+  border:1px solid #1f2937;
+  border-radius:16px;
+  padding:12px;
+  margin-bottom:10px;
+  cursor:pointer;
+  transition:0.2s ease-in-out;
+}
+
+.card:hover{
+  transform:scale(1.02);
+  border-color:#22c55e;
+}
+
+/* =========================
+   SCORE STYLE
+========================= */
+.text-xl{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.text-3xl{
+  font-size:26px;
+  font-weight:bold;
+}
+
+/* =========================
+   LIVE STATUS
+========================= */
+.live{
+  color:red;
+  font-weight:bold;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  0%{opacity:1;}
+  50%{opacity:0.4;}
+  100%{opacity:1;}
+}
+
+/* =========================
+   BUTTONS (TABS)
+========================= */
+.tab{
+  background:#111827;
+  color:#ffffff;
+  border:1px solid #1f2937;
+  padding:8px 12px;
+  border-radius:10px;
+  font-size:12px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.tab:hover{
+  background:#1f2937;
+  border-color:#22c55e;
+}
+
+/* =========================
+   FLEX HELPERS
+========================= */
+.flex{
+  display:flex;
+}
+
+.justify-between{
+  justify-content:space-between;
+}
+
+.gap-2{
+  gap:8px;
+}
+
+/* =========================
+   INPUT SEARCH
+========================= */
+input{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  outline:none;
+  margin-bottom:10px;
+  font-size:14px;
+}
+
+/* =========================
+   SECTION TITLE
+========================= */
+h2{
+  margin-bottom:10px;
+  font-size:18px;
+}
+
+h3{
+  margin:10px 0;
+  font-size:15px;
+  color:#22c55e;
+}
+
+/* =========================
+   BACK BUTTON
+========================= */
+button{
+  margin-top:10px;
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+@media(max-width:768px){
+  .card{
+    padding:10px;
+  }
+
+  .text-xl{
+    font-size:18px;
+  }
+
+  .text-3xl{
+    font-size:22px;
+  }
+}
